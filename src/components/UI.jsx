@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useStore } from '../store'
 
-// Product modal component with improved design
+// ----- Product Modal -----
 function ProductModal() {
   const selectedProduct = useStore((state) => state.selectedProduct)
   const clearSelectedProduct = useStore((state) => state.clearSelectedProduct)
@@ -30,95 +30,16 @@ function ProductModal() {
   )
 }
 
-// Enhanced Cart panel component that shows cart items when clicked
-function CartPanel() {
-  const cart = useStore((state) => state.cart)
-  const clearCart = useStore((state) => state.clearCart)
-  const [isOpen, setIsOpen] = useState(false)
-  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0)
-
-  return (
-    <div className={`cart-container ${isOpen ? 'open' : ''}`}>
-      <div className="cart-toggle" onClick={() => setIsOpen(!isOpen)}>
-        🛒 <span className="cart-count-badge">{totalItems}</span>
-      </div>
-      <div className="cart-content">
-        <h3>My Cart</h3>
-        {cart.length > 0 ? (
-          <>
-            <div className="cart-items-list">
-              {cart.map(item => (
-                <div key={item.id} className="cart-item-ui">
-                  <span>{item.name} (x{item.quantity})</span>
-                  <span>${(item.price * item.quantity).toFixed(2)}</span>
-                </div>
-              ))}
-            </div>
-            <button className="cart-clear" onClick={clearCart}>Clear Cart</button>
-          </>
-        ) : (
-          <p>Your cart is empty.</p>
-        )}
-      </div>
-    </div>
-  )
-}
-
-// Main UI component
-export function UI() {
-  return (
-    <>
-      <div className="crosshair">+</div>
-      <CartPanel />
-      <ProductModal />
-    </>
-  )
-}
-        >
-          {categories.map(category => (
-            <option key={category} value={category}>{category}</option>
-          ))}
-        </select>
-      </div>
-      
-      <div className="filter-row">
-        <label>Search:</label>
-        <input 
-          type="text" 
-          placeholder="Search products..." 
-          value={searchQuery} 
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-      
-      <div className="filter-badge">
-        {categoryFilter !== 'All' && (
-          <span className="category-badge">
-            {categoryFilter}
-            <button onClick={() => setCategoryFilter('All')}>×</button>
-          </span>
-        )}
-        {searchQuery && (
-          <span className="search-badge">
-            "{searchQuery}"
-            <button onClick={() => setSearchQuery('')}>×</button>
-          </span>
-        )}
-      </div>
-    </div>
-  )
-}
-
-// Enhanced Cart panel component that shows cart items when clicked
+// ----- Cart Panel -----
 function CartPanel() {
   const cart = useStore((state) => state.cart)
   const toggleCartOpen = useStore((state) => state.toggleCartOpen)
   const [showCartItems, setShowCartItems] = useState(false)
-  
   const [bounce, setBounce] = useState(false)
+
   const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0)
   const totalPrice = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0)
-  
+
   useEffect(() => {
     if (cart.length > 0) {
       setBounce(true)
@@ -130,7 +51,7 @@ function CartPanel() {
     setShowCartItems(!showCartItems)
     toggleCartOpen && toggleCartOpen()
   }
-  
+
   return (
     <div className="cart-container">
       <div className={`cart-panel ${bounce ? 'bounce' : ''}`} onClick={handleCartClick}>
@@ -140,8 +61,7 @@ function CartPanel() {
           <div>item{totalItems !== 1 ? 's' : ''}</div>
         </div>
       </div>
-      
-      {/* Cart items dropdown */}
+
       {showCartItems && (
         <div className="cart-dropdown">
           <h3>Shopping Cart</h3>
@@ -176,10 +96,55 @@ function CartPanel() {
   )
 }
 
-// Controls hint component with better visibility
+// ----- Filter Panel -----
+function FilterPanel() {
+  const [categoryFilter, setCategoryFilter] = useState('All')
+  const [searchQuery, setSearchQuery] = useState('')
+  const categories = ['All', 'Electronics', 'Clothing', 'Books'] // Example categories
+
+  return (
+    <div className="filter-panel">
+      <div className="filter-row">
+        <label>Category:</label>
+        <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+          {categories.map(category => (
+            <option key={category} value={category}>{category}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="filter-row">
+        <label>Search:</label>
+        <input 
+          type="text" 
+          placeholder="Search products..." 
+          value={searchQuery} 
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
+      <div className="filter-badge">
+        {categoryFilter !== 'All' && (
+          <span className="category-badge">
+            {categoryFilter}
+            <button onClick={() => setCategoryFilter('All')}>×</button>
+          </span>
+        )}
+        {searchQuery && (
+          <span className="search-badge">
+            "{searchQuery}"
+            <button onClick={() => setSearchQuery('')}>×</button>
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ----- Controls Hint -----
 function ControlsHint() {
   const [expanded, setExpanded] = useState(false)
-  
+
   return (
     <div 
       className={`controls-panel ${expanded ? 'expanded' : 'collapsed'}`}
@@ -188,33 +153,21 @@ function ControlsHint() {
       <h3>{expanded ? 'Controls' : '🎮'}</h3>
       {expanded && (
         <>
-          <div className="control-item">
-            <span className="key">WASD</span>
-            <span className="action">Move</span>
-          </div>
-          <div className="control-item">
-            <span className="key">Mouse</span>
-            <span className="action">Look</span>
-          </div>
-          <div className="control-item">
-            <span className="key">Click</span>
-            <span className="action">Select</span>
-          </div>
-          <div className="control-item">
-            <span className="key">Space</span>
-            <span className="action">Jump</span>
-          </div>
+          <div className="control-item"><span className="key">WASD</span><span className="action">Move</span></div>
+          <div className="control-item"><span className="key">Mouse</span><span className="action">Look</span></div>
+          <div className="control-item"><span className="key">Click</span><span className="action">Select</span></div>
+          <div className="control-item"><span className="key">Space</span><span className="action">Jump</span></div>
         </>
       )}
     </div>
   )
 }
 
-// Voice assistant component with active state
+// ----- Voice Assistant -----
 function VoiceAssistant() {
   const voiceAssistantActive = useStore((state) => state.voiceAssistantActive)
   const toggleVoiceAssistant = useStore((state) => state.toggleVoiceAssistant)
-  
+
   return (
     <div className="voice-assistant">
       <button 
@@ -231,42 +184,38 @@ function VoiceAssistant() {
   )
 }
 
-// Audio player for background music with volume control
+// ----- Audio Player -----
 function AudioPlayer() {
   const [audio] = useState(new Audio('/assets/audio/ambient.mp3'))
   const [playing, setPlaying] = useState(false)
-  
+
   useEffect(() => {
     audio.volume = 0.2
     audio.loop = true
-    
+
     const playAudio = () => {
       const playPromise = audio.play()
       if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setPlaying(true)
-          })
-          .catch(error => {
-            console.info("Autoplay prevented:", error)
-          })
+        playPromise.then(() => setPlaying(true)).catch((err) => {
+          console.info("Autoplay prevented:", err)
+        })
       }
     }
-    
+
     const handleFirstInteraction = () => {
       playAudio()
       document.removeEventListener('click', handleFirstInteraction)
     }
-    
+
     document.addEventListener('click', handleFirstInteraction)
-    
+
     return () => {
       audio.pause()
       audio.currentTime = 0
       document.removeEventListener('click', handleFirstInteraction)
     }
   }, [audio])
-  
+
   return (
     <div className="audio-controls">
       <button 
@@ -286,7 +235,7 @@ function AudioPlayer() {
   )
 }
 
-// Main UI component
+// ----- Main UI -----
 export function UI() {
   return (
     <div className="ui-container">
