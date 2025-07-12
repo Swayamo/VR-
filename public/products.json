@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "name": "Samsung LED TV 55 inch",
+    "price": 499.99,
+    "category": "Electronics",
+    "description": "Smart TV with 4K resolution, HDR support and voice assistant built-in.",
+    "rating": 4.5,
+    "image": "assets/images/tv.png"
+  },
+  {
+    "id": 2,
+    "name": "Organic Apples - 1kg",
+    "price": 3.99,
+    "category": "Groceries",
+    "description": "Freshly sourced organic apples, crisp and delicious.",
+    "rating": 4.8,
+    "image": "assets/images/apples.png"
+  },
+  {
+    "id": 3,
+    "name": "Men's Cotton T-Shirt",
+    "price": 12.50,
+    "category": "Clothing",
+    "description": "A comfortable and stylish 100% cotton t-shirt.",
+    "rating": 4.2,
+    "image": "assets/images/tshirt.png"
+  },
+  {
+    "id": 4,
+    "name": "Gaming Laptop",
+    "price": 1299.00,
+    "category": "Electronics",
+    "description": "High-performance gaming laptop with the latest GPU.",
+    "rating": 4.9,
+    "image": "assets/images/laptop.png"
+  },
+  {
+    "id": 5,
+    "name": "Whole Wheat Bread",
+    "price": 2.49,
+    "category": "Groceries",
+    "description": "Healthy and tasty whole wheat bread, freshly baked.",
+    "rating": 4.6,
+    "image": "assets/images/bread.png"
+  },
+  {
+    "id": 6,
+    "name": "Women's Jeans",
+    "price": 45.00,
+    "category": "Clothing",
+    "description": "Stylish and durable denim jeans for everyday wear.",
+    "rating": 4.4,
+    "image": "assets/images/jeans.png"
+  },
+  {
+    "id": 7,
+    "name": "Bluetooth Headphones",
+    "price": 79.99,
+    "category": "Electronics",
+    "description": "Wireless headphones with active noise cancellation and long battery life.",
+    "rating": 4.7,
+    "image": "assets/images/headphones.png"
+  },
+  {
+    "id": 8,
+    "name": "Fresh Bananas - bunch",
+    "price": 1.49,
+    "category": "Groceries",
+    "description": "Sweet and nutritious bananas, perfect for snacking or smoothies.",
+    "rating": 4.5,
+    "image": "assets/images/bananas.png"
+  },
+  {
+    "id": 9,
+    "name": "Running Shoes",
+    "price": 89.99,
+    "category": "Clothing",
+    "description": "Comfortable athletic shoes with support for running and training.",
+    "rating": 4.6,
+    "image": "assets/images/shoes.png"
+  },
+  {
+    "id": 10,
+    "name": "Smartphone",
+    "price": 699.99,
+    "category": "Electronics",
+    "description": "Latest model smartphone with high-resolution camera and fast processor.",
+    "rating": 4.8,
+    "image": "assets/images/smartphone.png"
+  },
+  {
+    "id": 11,
+    "name": "Milk - 1 Gallon",
+    "price": 3.29,
+    "category": "Groceries",
+    "description": "Fresh whole milk from local dairy farms.",
+    "rating": 4.3,
+    "image": "assets/images/milk.png"
+  },
+  {
+    "id": 12,
+    "name": "Winter Jacket",
+    "price": 129.99,
+    "category": "Clothing",
+    "description": "Warm and waterproof jacket for cold winter days.",
+    "rating": 4.7,
+    "image": "assets/images/jacket.png"
+  },
+  {
+    "id": 13,
+    "name": "Toy Robot",
+    "price": 24.99,
+    "category": "Toys",
+    "description": "Interactive robot toy with lights and sounds for children.",
+    "rating": 4.4,
+    "image": "assets/images/robot.png"
+  },
+  {
+    "id": 14,
+    "name": "Building Blocks Set",
+    "price": 19.99,
+    "category": "Toys",
+    "description": "Creative building blocks for imaginative play.",
+    "rating": 4.6,
+    "image": "assets/images/blocks.png"
+  },
+  {
+    "id": 15,
+    "name": "Stuffed Bear",
+    "price": 12.99,
+    "category": "Toys",
+    "description": "Soft and huggable teddy bear for bedtime companions.",
+    "rating": 4.8,
+    "image": "assets/images/bear.png"
+  },
+  {
+    "id": 16,
+    "name": "Plant Pot",
+    "price": 8.99,
+    "category": "Home",
+    "description": "Ceramic pot for indoor plants with drainage hole.",
+    "rating": 4.2,
+    "image": "assets/images/pot.png"
+  },
+  {
+    "id": 17,
+    "name": "Bed Sheets",
+    "price": 29.99,
+    "category": "Home",
+    "description": "Soft cotton bed sheets for a comfortable night's sleep.",
+    "rating": 4.5,
+    "image": "assets/images/sheets.png"
+  },
+  {
+    "id": 18,
+    "name": "Kitchen Knife Set",
+    "price": 49.99,
+    "category": "Home",
+    "description": "Set of sharp stainless steel knives for all your cooking needs.",
+    "rating": 4.7,
+    "image": "assets/images/knives.png"
+  },
+  {
+    "id": 19,
+    "name": "Garden Hose",
+    "price": 19.99,
+    "category": "Garden",
+    "description": "Durable and flexible hose for watering your garden.",
+    "rating": 4.3,
+    "image": "assets/images/hose.png"
+  },
+  {
+    "id": 20,
+    "name": "Plant Seeds",
+    "price": 3.99,
+    "category": "Garden",
+    "description": "Variety of vegetable and flower seeds for your garden.",
+    "rating": 4.6,
+    "image": "assets/images/seeds.png"
+  }
+]
