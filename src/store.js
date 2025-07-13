@@ -43,6 +43,9 @@ export const useStore = create((set, get) => ({
   
   closeProductModal: () => set({ selectedProduct: null }),
   
+  // Add alias for compatibility
+  clearSelectedProduct: () => set({ selectedProduct: null }),
+  
   setCategoryFilter: (category) => set({ categoryFilter: category }),
   
   setSearchQuery: (query) => set({ searchQuery: query }),

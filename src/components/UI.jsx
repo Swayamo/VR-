@@ -4,16 +4,56 @@ import { useStore } from '../store'
 // ----- Product Modal -----
 function ProductModal() {
   const selectedProduct = useStore((state) => state.selectedProduct)
-  const clearSelectedProduct = useStore((state) => state.clearSelectedProduct)
+  const closeProductModal = useStore((state) => state.closeProductModal)
   const addToCart = useStore((state) => state.addToCart)
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && selectedProduct) {
+        closeProductModal()
+      }
+    }
+
+    if (selectedProduct) {
+      document.addEventListener('keydown', handleEscape)
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'auto'
+    }
+  }, [selectedProduct, closeProductModal])
 
   if (!selectedProduct) return null
 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      closeProductModal()
+    }
+  }
+
+  const handleAddToCart = () => {
+    addToCart(selectedProduct)
+    closeProductModal()
+  }
+
   return (
-    <div className="modal-overlay" onClick={clearSelectedProduct}>
+    <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={clearSelectedProduct}>×</button>
-        <img src={selectedProduct.image} alt={selectedProduct.name} className="modal-image" />
+        <button className="modal-close" onClick={closeProductModal} aria-label="Close Modal">
+          ×
+        </button>
+        <img 
+          src={selectedProduct.image} 
+          alt={selectedProduct.name} 
+          className="modal-image"
+          onError={(e) => {
+            console.log('Image failed to load:', selectedProduct.image)
+            e.target.src = "https://via.placeholder.com/250x250/cccccc/000000?text=No+Image"
+          }}
+        />
         <div className="modal-details">
           <h2>{selectedProduct.name}</h2>
           <p className="modal-description">{selectedProduct.description}</p>
@@ -21,7 +61,7 @@ function ProductModal() {
             <span className="modal-price">${selectedProduct.price.toFixed(2)}</span>
             <span className="modal-rating">⭐ {selectedProduct.rating}</span>
           </div>
-          <button className="modal-add-to-cart" onClick={() => addToCart(selectedProduct)}>
+          <button className="modal-add-to-cart" onClick={handleAddToCart}>
             Add to Cart
           </button>
         </div>

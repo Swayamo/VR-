@@ -100,74 +100,29 @@ function DepartmentSigns() {
   )
 }
 
-// Improved floor: no flicker, more realistic, with Walmart logo and aisle lines
+// Simple, non-reflective floor without flickering
 function EnhancedFloor() {
-  const deptFloors = [
-    { pos: [-25, 0.002, -20], color: "#4287f5", size: [25, 25] },
-    { pos: [25, 0.002, -20], color: "#42f54e", size: [25, 25] },
-    { pos: [-25, 0.002, 20], color: "#f54242", size: [25, 25] },
-    { pos: [25, 0.002, 20], color: "#b142f5", size: [25, 25] }
-  ]
   return (
     <group>
-      {/* Main floor */}
-      <mesh renderOrder={0} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
+      {/* Main floor - single solid surface */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[150, 150]} />
-        <meshPhysicalMaterial
-          color="#f8f8f8"
-          roughness={0.04}
-          metalness={0.15}
-          clearcoat={1}
-          clearcoatRoughness={0.08}
-          envMapIntensity={1.2}
-          reflectivity={0.7}
+        <meshStandardMaterial
+          color="#f5f5f5"
+          roughness={0.9}
+          metalness={0.0}
         />
       </mesh>
-      {/* Subtle tile grid */}
-      <mesh renderOrder={1} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, 0]}>
-        <planeGeometry args={[150, 150, 30, 30]} />
-        <meshBasicMaterial color="#dddddd" wireframe transparent opacity={0.08} />
-      </mesh>
-      {/* Main aisle */}
-      <mesh renderOrder={2} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
-        <planeGeometry args={[10, 100]} />
-        <meshBasicMaterial color="#e3f2fd" transparent opacity={0.22} />
-      </mesh>
-      {/* Department floor highlights */}
-      {deptFloors.map((dept, i) => (
-        <mesh renderOrder={3} key={i} rotation={[-Math.PI / 2, 0, 0]} position={dept.pos}>
-          <planeGeometry args={dept.size} />
-          <meshBasicMaterial color={dept.color} transparent opacity={0.09} />
-        </mesh>
-      ))}
-      {/* Walmart logo on entrance floor */}
-      <group renderOrder={4} position={[0, 0.003, 40]} rotation={[-Math.PI / 2, 0, 0]} scale={[3, 3, 3]}>
-        <mesh>
-          <circleGeometry args={[2, 32]} />
-          <meshBasicMaterial color="#0071dc" transparent opacity={0.18} />
-        </mesh>
-        {[...Array(6)].map((_, i) => (
-          <mesh key={i} rotation={[0, 0, (Math.PI / 3) * i]} position={[0.7, 0, 0]}>
-            <planeGeometry args={[1, 0.2]} />
-            <meshBasicMaterial color="#ffc220" transparent opacity={0.28} />
-          </mesh>
-        ))}
-      </group>
-      {/* Aisle lines */}
-      {[-30, -15, 0, 15, 30].map((x, i) => (
-        <mesh renderOrder={5} key={i} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.004, 0]}>
-          <planeGeometry args={[0.5, 100]} />
-          <meshBasicMaterial color={i % 2 === 0 ? "#0071dc" : "#ffc220"} transparent opacity={0.13} />
-        </mesh>
-      ))}
+      
+      {/* Simple contact shadows only */}
       <ContactShadows
-        position={[0, 0.001, 0]}
-        opacity={0.5}
+        position={[0, 0.01, 0]}
+        opacity={0.3}
         width={150}
         height={150}
-        blur={3}
-        far={10}
-        resolution={1024}
+        blur={2}
+        far={8}
+        resolution={512}
         color="#000000"
       />
     </group>
@@ -193,21 +148,45 @@ export function Scene() {
         const response = await fetch('/products.json')
         if (!response.ok) throw new Error('Failed to fetch products')
         const data = await response.json()
-        const processedData = data.map(product => ({
+        const processedData = data.map((product) => ({
           ...product,
-          image: product.image || `https://via.placeholder.com/150?text=${encodeURIComponent(product.name)}`
+          image: product.image || "https://via.placeholder.com/150x150/cccccc/000000?text=No+Image"
         }))
         setProducts(processedData)
         console.log('Products loaded:', processedData.length)
       } catch (error) {
         console.error('Error loading products:', error)
         const fallbackProducts = [
-          { id: 1, name: "Samsung TV", price: 499.99, category: "Electronics", description: "4K Smart TV", rating: 4.5, image: "https://via.placeholder.com/150?text=TV" },
-          { id: 2, name: "Fresh Apples", price: 3.99, category: "Groceries", description: "Organic apples", rating: 4.8, image: "https://via.placeholder.com/150?text=Apples" },
-          { id: 3, name: "Blue Jeans", price: 29.99, category: "Clothing", description: "Classic jeans", rating: 4.2, image: "https://via.placeholder.com/150?text=Jeans" }
+          { 
+            id: 1, 
+            name: "Samsung TV", 
+            price: 499.99, 
+            category: "Electronics", 
+            description: "4K Smart TV", 
+            rating: 4.5, 
+            image: "https://via.placeholder.com/150x150/4287f5/white?text=TV" 
+          },
+          { 
+            id: 2, 
+            name: "Fresh Apples", 
+            price: 3.99, 
+            category: "Groceries", 
+            description: "Organic apples", 
+            rating: 4.8, 
+            image: "https://via.placeholder.com/150x150/42f54e/white?text=Apples" 
+          },
+          { 
+            id: 3, 
+            name: "Blue Jeans", 
+            price: 29.99, 
+            category: "Clothing", 
+            description: "Classic jeans", 
+            rating: 4.2, 
+            image: "https://via.placeholder.com/150x150/f54242/white?text=Jeans" 
+          }
         ]
         setProducts(fallbackProducts)
-        console.log('Using fallback products')
+        console.log('Using fallback products:', fallbackProducts.length)
       }
     }
     fetchProducts()
@@ -249,5 +228,5 @@ export function Scene() {
         </Suspense>
       </Physics>
     </>
-  )
+  );
 }
