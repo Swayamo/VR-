@@ -6,7 +6,7 @@
     "category": "Electronics",
     "description": "Smart TV with 4K resolution, HDR support and voice assistant built-in.",
     "rating": 4.5,
-    "image": "assets/images/tv.png"
+    "image": "https://picsum.photos/300/300?random=1"
   },
   {
     "id": 2,
@@ -15,7 +15,7 @@
     "category": "Groceries",
     "description": "Freshly sourced organic apples, crisp and delicious.",
     "rating": 4.8,
-    "image": "assets/images/apples.png"
+    "image": "https://picsum.photos/300/300?random=2"
   },
   {
     "id": 3,
@@ -24,7 +24,7 @@
     "category": "Clothing",
     "description": "A comfortable and stylish 100% cotton t-shirt.",
     "rating": 4.2,
-    "image": "assets/images/tshirt.png"
+    "image": "https://picsum.photos/300/300?random=3"
   },
   {
     "id": 4,
@@ -33,7 +33,7 @@
     "category": "Electronics",
     "description": "High-performance gaming laptop with the latest GPU.",
     "rating": 4.9,
-    "image": "assets/images/laptop.png"
+    "image": "https://picsum.photos/300/300?random=4"
   },
   {
     "id": 5,
@@ -42,7 +42,7 @@
     "category": "Groceries",
     "description": "Healthy and tasty whole wheat bread, freshly baked.",
     "rating": 4.6,
-    "image": "assets/images/bread.png"
+    "image": "https://picsum.photos/300/300?random=5"
   },
   {
     "id": 6,
@@ -51,7 +51,7 @@
     "category": "Clothing",
     "description": "Stylish and durable denim jeans for everyday wear.",
     "rating": 4.4,
-    "image": "assets/images/jeans.png"
+    "image": "https://picsum.photos/300/300?random=6"
   },
   {
     "id": 7,
@@ -60,7 +60,7 @@
     "category": "Electronics",
     "description": "Wireless headphones with active noise cancellation and long battery life.",
     "rating": 4.7,
-    "image": "assets/images/headphones.png"
+    "image": "https://picsum.photos/300/300?random=7"
   },
   {
     "id": 8,
@@ -69,7 +69,7 @@
     "category": "Groceries",
     "description": "Sweet and nutritious bananas, perfect for snacking or smoothies.",
     "rating": 4.5,
-    "image": "assets/images/bananas.png"
+    "image": "https://picsum.photos/300/300?random=8"
   },
   {
     "id": 9,
@@ -78,7 +78,7 @@
     "category": "Clothing",
     "description": "Comfortable athletic shoes with support for running and training.",
     "rating": 4.6,
-    "image": "assets/images/shoes.png"
+    "image": "https://picsum.photos/300/300?random=9"
   },
   {
     "id": 10,
@@ -87,7 +87,7 @@
     "category": "Electronics",
     "description": "Latest model smartphone with high-resolution camera and fast processor.",
     "rating": 4.8,
-    "image": "assets/images/smartphone.png"
+    "image": "https://picsum.photos/300/300?random=10"
   },
   {
     "id": 11,
@@ -96,7 +96,7 @@
     "category": "Groceries",
     "description": "Fresh whole milk from local dairy farms.",
     "rating": 4.3,
-    "image": "assets/images/milk.png"
+    "image": "https://picsum.photos/300/300?random=11"
   },
   {
     "id": 12,
@@ -105,7 +105,7 @@
     "category": "Clothing",
     "description": "Warm and waterproof jacket for cold winter days.",
     "rating": 4.7,
-    "image": "assets/images/jacket.png"
+    "image": "https://picsum.photos/300/300?random=12"
   },
   {
     "id": 13,
@@ -114,7 +114,7 @@
     "category": "Toys",
     "description": "Interactive robot toy with lights and sounds for children.",
     "rating": 4.4,
-    "image": "assets/images/robot.png"
+    "image": "https://picsum.photos/300/300?random=13"
   },
   {
     "id": 14,
@@ -123,7 +123,7 @@
     "category": "Toys",
     "description": "Creative building blocks for imaginative play.",
     "rating": 4.6,
-    "image": "assets/images/blocks.png"
+    "image": "https://picsum.photos/300/300?random=14"
   },
   {
     "id": 15,
@@ -132,7 +132,7 @@
     "category": "Toys",
     "description": "Soft and huggable teddy bear for bedtime companions.",
     "rating": 4.8,
-    "image": "assets/images/bear.png"
+    "image": "https://picsum.photos/300/300?random=15"
   },
   {
     "id": 16,
@@ -141,7 +141,7 @@
     "category": "Home",
     "description": "Ceramic pot for indoor plants with drainage hole.",
     "rating": 4.2,
-    "image": "assets/images/pot.png"
+    "image": "https://picsum.photos/300/300?random=16"
   },
   {
     "id": 17,
@@ -150,7 +150,7 @@
     "category": "Home",
     "description": "Soft cotton bed sheets for a comfortable night's sleep.",
     "rating": 4.5,
-    "image": "assets/images/sheets.png"
+    "image": "https://picsum.photos/300/300?random=17"
   },
   {
     "id": 18,
@@ -159,7 +159,7 @@
     "category": "Home",
     "description": "Set of sharp stainless steel knives for all your cooking needs.",
     "rating": 4.7,
-    "image": "assets/images/knives.png"
+    "image": "https://picsum.photos/300/300?random=18"
   },
   {
     "id": 19,
@@ -168,7 +168,7 @@
     "category": "Garden",
     "description": "Durable and flexible hose for watering your garden.",
     "rating": 4.3,
-    "image": "assets/images/hose.png"
+    "image": "https://picsum.photos/300/300?random=19"
   },
   {
     "id": 20,
@@ -177,6 +177,6 @@
     "category": "Garden",
     "description": "Variety of vegetable and flower seeds for your garden.",
     "rating": 4.6,
-    "image": "assets/images/seeds.png"
+    "image": "https://picsum.photos/300/300?random=20"
   }
 ]

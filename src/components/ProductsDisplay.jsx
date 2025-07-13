@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useBox } from '@react-three/cannon'
 import { Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
@@ -14,10 +14,11 @@ const CATEGORY_COLORS = {
   'Garden': '#42f5c8'
 }
 
-// Individual product component with NO TEXTURES
+// Individual product component with optimized animations
 function Product({ product, position }) {
   const selectProduct = useStore((state) => state.selectProduct)
   const [hover, setHover] = useState(false)
+  const animationRef = useRef({ time: Math.random() * Math.PI * 2 })
   
   // Use simple color-based material instead of textures
   const color = CATEGORY_COLORS[product.category] || '#ffffff'
@@ -28,15 +29,26 @@ function Product({ product, position }) {
     args: [1, 1, 1],
   }))
   
-  // Animation for hover effect
-  useFrame((state) => {
+  // Optimized click handler
+  const handleClick = useCallback(() => {
+    selectProduct(product)
+  }, [selectProduct, product])
+
+  const handlePointerOver = useCallback(() => setHover(true), [])
+  const handlePointerOut = useCallback(() => setHover(false), [])
+  
+  // Smoother animation with reduced frequency
+  useFrame((state, delta) => {
     if (!ref.current) return
 
+    animationRef.current.time += delta
+
     if (hover) {
-      ref.current.position.y = position[1] + 0.5 + Math.sin(state.clock.elapsedTime * 2) * 0.1
-      ref.current.rotation.y += 0.02
+      ref.current.position.y = position[1] + 0.5 + Math.sin(animationRef.current.time * 3) * 0.08
+      ref.current.rotation.y += delta * 2
     } else {
-      ref.current.position.y = position[1] + Math.sin(state.clock.elapsedTime) * 0.1
+      ref.current.position.y = position[1] + Math.sin(animationRef.current.time * 0.8) * 0.05
+      ref.current.rotation.y = Math.sin(animationRef.current.time * 0.5) * 0.1
     }
   })
 
@@ -45,18 +57,19 @@ function Product({ product, position }) {
       {/* Product box */}
       <mesh 
         ref={ref}
-        onClick={() => selectProduct(product)}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
+        onClick={handleClick}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
         castShadow
+        receiveShadow
       >
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial 
           color={color} 
           emissive={color}
-          emissiveIntensity={hover ? 0.5 : 0.1}
-          metalness={0.8}
-          roughness={0.2}
+          emissiveIntensity={hover ? 0.3 : 0.05}
+          metalness={0.6}
+          roughness={0.3}
         />
       </mesh>
       
@@ -68,8 +81,7 @@ function Product({ product, position }) {
           color="white"
           anchorX="center"
           anchorY="middle"
-          backgroundColor="#00000080"
-          padding={[0.1, 0.2]}
+          maxWidth={2}
         >
           {product.name}
         </Text>
@@ -80,7 +92,7 @@ function Product({ product, position }) {
         <group position={[position[0], position[1] - 0.7, position[2]]}>
           <mesh position={[0, 0, 0.1]}>
             <planeGeometry args={[0.8, 0.3]} />
-            <meshBasicMaterial color="#0071dc" /> {/* Walmart blue */}
+            <meshBasicMaterial color="#0071dc" />
           </mesh>
           <Text
             position={[0, 0, 0.2]}
@@ -92,16 +104,6 @@ function Product({ product, position }) {
             ${product.price?.toFixed(2) || '0.00'}
           </Text>
         </group>
-      )}
-      
-      {/* Add a light on hover for better visibility */}
-      {hover && (
-        <pointLight 
-          position={[position[0], position[1] + 1, position[2]]}
-          intensity={1}
-          distance={3}
-          color={color}
-        />
       )}
     </group>
   )

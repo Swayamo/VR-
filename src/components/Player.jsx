@@ -32,8 +32,6 @@ export function Player({ position = [0, 2, 10] }) {
   // Add movement smoothing variables
   const targetDirection = useRef(new Vector3())
   const currentDirection = useRef(new Vector3())
-  const footstepTimer = useRef(0)
-  const bobTimer = useRef(0)
   
   useEffect(() => {
     // Subscribe to both velocity and position changes
@@ -61,11 +59,10 @@ export function Player({ position = [0, 2, 10] }) {
         case 'KeyS': case 'ArrowDown':
           setKeys(keys => ({ ...keys, backward: true }))
           break
-        // Swapped A and D keys
-        case 'KeyD': case 'ArrowLeft':  // Changed from 'KeyA' to 'KeyD' for left
+        case 'KeyA': case 'ArrowLeft':
           setKeys(keys => ({ ...keys, left: true }))
           break
-        case 'KeyA': case 'ArrowRight': // Changed from 'KeyD' to 'KeyA' for right
+        case 'KeyD': case 'ArrowRight':
           setKeys(keys => ({ ...keys, right: true }))
           break
         case 'Space':
@@ -82,11 +79,10 @@ export function Player({ position = [0, 2, 10] }) {
         case 'KeyS': case 'ArrowDown':
           setKeys(keys => ({ ...keys, backward: false }))
           break
-        // Swapped A and D keys
-        case 'KeyD': case 'ArrowLeft':  // Changed from 'KeyA' to 'KeyD' for left
+        case 'KeyA': case 'ArrowLeft':
           setKeys(keys => ({ ...keys, left: false }))
           break
-        case 'KeyA': case 'ArrowRight': // Changed from 'KeyD' to 'KeyA' for right
+        case 'KeyD': case 'ArrowRight':
           setKeys(keys => ({ ...keys, right: false }))
           break
         case 'Space':
@@ -107,13 +103,13 @@ export function Player({ position = [0, 2, 10] }) {
     }
   }, [])
 
-  // Enhanced movement physics with smoothing
+  // Smooth movement physics without head bobbing
   useFrame((state, delta) => {
     if (!controlsRef.current?.isLocked) return
     
     // Calculate target direction based on keys
     targetDirection.current.set(
-      Number(keys.left) - Number(keys.right),
+      Number(keys.right) - Number(keys.left),
       0,
       Number(keys.backward) - Number(keys.forward)
     )
@@ -123,27 +119,13 @@ export function Player({ position = [0, 2, 10] }) {
       
       // Apply camera rotation to direction
       targetDirection.current.applyEuler(camera.rotation)
-      
-      // Head bobbing effect for more realistic walking
-      bobTimer.current += delta * (velocity.current[0]**2 + velocity.current[2]**2)
-      const bobHeight = Math.sin(bobTimer.current * 10) * 0.03
-      
-      // Play footstep sounds at appropriate intervals
-      footstepTimer.current -= delta
-      if (footstepTimer.current <= 0) {
-        // We would play footstep sound here
-        footstepTimer.current = 0.4 // Reset timer (steps every 0.4 seconds)
-      }
-    } else {
-      // Reset bob timer when not moving
-      bobTimer.current = 0
     }
     
     // Smooth acceleration - interpolate current direction toward target direction
     currentDirection.current.lerp(targetDirection.current, delta * 10)
     
-    // Apply speed, with sprint if shift key is held
-    const speed = keys.sprint ? 10 : 5
+    // Apply speed - increased from 5 to 6.25 (1.25x faster)
+    const speed = 6.25
     const moveDirection = currentDirection.current.clone().multiplyScalar(speed)
     
     // Apply movement with current vertical velocity preserved
@@ -153,14 +135,12 @@ export function Player({ position = [0, 2, 10] }) {
     const isNearGround = Math.abs(velocity.current[1]) < 0.2
     if (keys.jump && isNearGround) {
       api.velocity.set(velocity.current[0], 8, velocity.current[2])
-      // Add jump sound effect here
     }
     
-    // Update camera with smooth positioning
+    // Update camera with smooth positioning (removed bobbing effect)
     if (playerPosition.current) {
-      // Eye height with subtle bob effect when walking
-      const eyeHeight = 1.7 + (targetDirection.current.length() > 0.1 ? 
-                              Math.sin(bobTimer.current * 10) * 0.03 : 0)
+      // Fixed eye height - no bobbing
+      const eyeHeight = 1.7
       
       camera.position.set(
         playerPosition.current[0],
