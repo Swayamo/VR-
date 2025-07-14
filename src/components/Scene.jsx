@@ -7,6 +7,7 @@ import { useStore } from '../store'
 import { Player } from './Player'
 import { StoreLayout } from './StoreLayout'
 import { ProductsDisplay } from './ProductsDisplay'
+import { MultiplayerUsers } from './MultiplayerUsers'
 
 // Improved Walmart wall with high-quality text branding and blue/yellow accent
 function WallWithBranding({ position, rotation, width, height }) {
@@ -217,6 +218,7 @@ export function Scene() {
       <Physics gravity={[0, -30, 0]} defaultContactMaterial={{ friction: 0.1, restitution: 0.1 }} iterations={8}>
         <Suspense fallback={null}>
           <Player position={[0, 3, 15]} />
+          <MultiplayerUsers />
           <StoreLayout />
           <ProductsDisplay />
           <EnhancedFloor />

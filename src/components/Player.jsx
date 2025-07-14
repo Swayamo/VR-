@@ -3,9 +3,12 @@ import { useSphere } from '@react-three/cannon'
 import { useThree, useFrame } from '@react-three/fiber'
 import { PointerLockControls } from '@react-three/drei'
 import { Vector3 } from 'three'
+import { useStore } from '../store'
 
 export function Player({ position = [0, 2, 10] }) {
   const { camera } = useThree()
+  const socket = useStore((state) => state.socket)
+  const lastPositionRef = useRef([0, 0, 0])
   
   const [keys, setKeys] = useState({
     forward: false,
@@ -137,9 +140,8 @@ export function Player({ position = [0, 2, 10] }) {
       api.velocity.set(velocity.current[0], 8, velocity.current[2])
     }
     
-    // Update camera with smooth positioning (removed bobbing effect)
+    // Update camera with smooth positioning and sync with other users
     if (playerPosition.current) {
-      // Fixed eye height - no bobbing
       const eyeHeight = 1.7
       
       camera.position.set(
@@ -147,6 +149,29 @@ export function Player({ position = [0, 2, 10] }) {
         playerPosition.current[1] + eyeHeight,
         playerPosition.current[2]
       )
+      
+      // Send position updates to other users (throttled)
+      const currentPos = [
+        playerPosition.current[0],
+        playerPosition.current[1],
+        playerPosition.current[2]
+      ]
+      
+      const distance = Math.sqrt(
+        Math.pow(currentPos[0] - lastPositionRef.current[0], 2) +
+        Math.pow(currentPos[1] - lastPositionRef.current[1], 2) +
+        Math.pow(currentPos[2] - lastPositionRef.current[2], 2)
+      )
+      
+      // Only send updates if moved significantly (optimization)
+      if (distance > 0.1 && socket) {
+        socket.emit('update-position', currentPos, [
+          camera.rotation.x,
+          camera.rotation.y,
+          camera.rotation.z
+        ])
+        lastPositionRef.current = currentPos
+      }
     }
   })
 
