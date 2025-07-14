@@ -2,26 +2,43 @@ import { useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
 import React from 'react'
+import { BrowserRouter as Router, Routes, Route, useParams, useSearchParams } from 'react-router-dom'
 import { Scene } from './components/Scene'
 import { UI } from './components/UI'
 import { LoadingScreen } from './components/LoadingScreen'
+import { RoomEntry } from './components/RoomEntry'
 import Cursor from './components/Cursor'
+import { useSocket } from './hooks/useSocket'
+import { useStore } from './store'
 import './App.css'
 
-function App() {
+function VRExperience() {
+  const { roomId } = useParams()
+  const [searchParams] = useSearchParams()
+  const username = searchParams.get('username') || 'Anonymous'
+  
   const [canvasReady, setCanvasReady] = useState(false)
+  const setRoomId = useStore((state) => state.setRoomId)
+  const setSocket = useStore((state) => state.setSocket)
+  const setCurrentUser = useStore((state) => state.setCurrentUser)
+
+  // Initialize socket connection
+  const socket = useSocket(roomId, username)
 
   useEffect(() => {
+    setRoomId(roomId)
+    setSocket(socket)
+    setCurrentUser({ username, roomId })
+    
     const timer = setTimeout(() => {
       setCanvasReady(true)
     }, 100)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [roomId, username, socket])
 
   return (
     <div className="App">
-      {/* Error boundary for debugging */}
       <ErrorBoundary>
         <Suspense fallback={<LoadingScreen />}>
           <Canvas
@@ -58,6 +75,24 @@ function App() {
         </Suspense>
       </ErrorBoundary>
 
+      {/* Room info display */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '10px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          color: 'white',
+          background: 'rgba(0,0,0,0.7)',
+          padding: '10px 20px',
+          borderRadius: '20px',
+          fontSize: '14px',
+          textAlign: 'center',
+        }}
+      >
+        Room: {roomId} | User: {username}
+      </div>
+
       {canvasReady && (
         <div
           style={{
@@ -71,10 +106,21 @@ function App() {
             fontSize: '12px',
           }}
         >
-          VR Walmart Experience
+          VR Walmart Experience (Multiplayer)
         </div>
       )}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<RoomEntry />} />
+        <Route path="/:roomId" element={<VRExperience />} />
+      </Routes>
+    </Router>
   )
 }
 
