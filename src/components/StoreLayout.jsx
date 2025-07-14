@@ -1,14 +1,16 @@
 import { useBox, usePlane } from '@react-three/cannon'
-import { useTexture } from '@react-three/drei'
+import { useTexture, Text } from '@react-three/drei'
 import { RepeatWrapping } from 'three'
 import { AmbientLight } from 'three'
 
-// Colors for Minecraft-like voxel style
+// Updated colors to match Walmart's signature theme
 const COLORS = {
-  FLOOR: '#8B4513', // Brown
-  WALL: '#E0E0E0',  // Light gray
-  CEILING: '#FFFFFF', // White
-  SHELVES: '#7e481c'  // Dark brown
+  FLOOR: '#F5F5F5',         // Warmer light gray
+  WALL: '#FFFFFF',          // White walls (as requested)
+  CEILING: '#F0F0F0',       // Light gray ceiling (neutral)
+  SHELVES: '#2c3e50',       // Dark blue-gray shelves (modern retail)
+  ACCENT: '#ffc220',        // Walmart yellow accent
+  DEPARTMENT_SIGN: '#004c91' // Darker blue for department signs to avoid merging with the ceiling
 }
 
 function Floor() {
@@ -19,9 +21,9 @@ function Floor() {
   }))
 
   return (
-    <mesh ref={ref} visible={false}>
+    <mesh ref={ref} receiveShadow>
       <planeGeometry args={[100, 100]} />
-      <meshBasicMaterial transparent opacity={0} />
+      <meshStandardMaterial color={COLORS.FLOOR} />
     </mesh>
   )
 }
@@ -36,7 +38,7 @@ function Ceiling() {
   return (
     <mesh ref={ref}>
       <planeGeometry args={[100, 100]} />
-      <meshBasicMaterial color={COLORS.CEILING} />
+      <meshStandardMaterial color={COLORS.CEILING} />
     </mesh>
   )
 }
@@ -52,8 +54,126 @@ function Wall({ position, rotation, size }) {
   return (
     <mesh ref={ref} receiveShadow castShadow>
       <boxGeometry args={size} />
-      <meshBasicMaterial color={COLORS.WALL} />
+      <meshStandardMaterial 
+        color={COLORS.WALL} 
+        metalness={0.1}
+        roughness={0.7}
+      />
     </mesh>
+  )
+}
+
+// Enhanced Walmart-style wall with branding
+function WalmartWall({ position, rotation, size, showLogo = false }) {
+  const [ref] = useBox(() => ({ 
+    position,
+    rotation,
+    args: size,
+    type: 'Static'
+  }))
+
+  // Load the Walmart logo texture
+  let logoTexture = null
+  try {
+    logoTexture = useTexture('/walmart-logo.png')
+  } catch (error) {
+    console.warn('Walmart logo texture not found, using fallback')
+  }
+
+  return (
+    <group>
+      <mesh ref={ref} receiveShadow castShadow>
+        <boxGeometry args={size} />
+        <meshStandardMaterial 
+          color={COLORS.WALL} 
+          metalness={0.1}
+          roughness={0.7}
+        />
+      </mesh>
+      
+      {/* Walmart logo and branding */}
+      {showLogo && (
+        <group position={position} rotation={rotation}>
+          {/* Walmart logo as image texture */}
+          <group position={[0, 0, size[2]/2 + 0.02]}>
+            {logoTexture ? (
+              // Use actual Walmart logo image
+              <mesh>
+                <planeGeometry args={[12, 4]} />
+                <meshStandardMaterial 
+                  map={logoTexture}
+                  transparent={true}
+                  alphaTest={0.1}
+                />
+              </mesh>
+            ) : (
+              // Fallback to text-based logo
+              <group>
+                <Text
+                  position={[-4, 0, 0]}
+                  fontSize={2}
+                  color="#0071dc"
+                  anchorX="center"
+                  anchorY="middle"
+                  fontWeight="bold"
+                  letterSpacing={0.05}
+                >
+                  Walmart
+                </Text>
+                
+                {/* Simple spark symbol */}
+                <group position={[3, 0, 0]}>
+                  <mesh>
+                    <circleGeometry args={[0.6, 32]} />
+                    <meshStandardMaterial 
+                      color={COLORS.ACCENT} 
+                      emissive={COLORS.ACCENT} 
+                      emissiveIntensity={0.3} 
+                    />
+                  </mesh>
+                  
+                  {/* 6 spark rays */}
+                  {[...Array(6)].map((_, i) => {
+                    const angle = (Math.PI * 2 / 6) * i
+                    return (
+                      <mesh 
+                        key={i} 
+                        position={[
+                          Math.cos(angle) * 1.2,
+                          Math.sin(angle) * 1.2,
+                          0
+                        ]}
+                        rotation={[0, 0, angle]}
+                      >
+                        <boxGeometry args={[0.8, 0.2, 0.05]} />
+                        <meshStandardMaterial 
+                          color={COLORS.ACCENT} 
+                          emissive={COLORS.ACCENT} 
+                          emissiveIntensity={0.3} 
+                        />
+                      </mesh>
+                    )
+                  })}
+                </group>
+              </group>
+            )}
+            
+            {/* Slogan below the logo */}
+            <Text
+              position={[0, -3, 0]}
+              fontSize={0.6}
+              color="white"
+              anchorX="center"
+              anchorY="middle"
+              maxWidth={15}
+              letterSpacing={0.02}
+            >
+              Save money. Live better.
+            </Text>
+          </group>
+        </group>
+      )}
+    </group>
   )
 }
 
@@ -64,31 +184,37 @@ function Shelf({ position, size = [10, 0.5, 3], textureUrl }) {
     type: 'Static'
   }))
   
-  // Use fallback color if texture fails to load
-  try {
-    const texture = useTexture(textureUrl)
-    return (
-      <mesh ref={ref} receiveShadow castShadow>
-        <boxGeometry args={size} />
-        <meshBasicMaterial map={texture} />
-      </mesh>
-    )
-  } catch (error) {
-    console.warn('Texture failed to load, using fallback color:', textureUrl)
-    return (
-      <mesh ref={ref} receiveShadow castShadow>
-        <boxGeometry args={size} />
-        <meshBasicMaterial color={COLORS.SHELVES} />
-      </mesh>
-    )
-  }
+  // Use brown shelving color
+  return (
+    <mesh ref={ref} receiveShadow castShadow>
+      <boxGeometry args={size} />
+      <meshStandardMaterial 
+        color={COLORS.SHELVES} 
+        metalness={0.1}
+        roughness={0.8}
+      />
+    </mesh>
+  )
 }
 
-// Create a department with shelves
+// Create a department with Walmart-style shelves and section label
 function Department({ position, rotation = [0, 0, 0], shelves = 3, label, itemTextures }) {
   return (
     <group position={position} rotation={rotation}>
-      {/* Department shelves */}
+      {/* Section label */}
+      <Text
+        position={[0, 8.5, 0]} // Moved down from 10 to 8.5 to be fully visible
+        fontSize={1.2}
+        color={COLORS.DEPARTMENT_SIGN} // Updated to darker blue
+        anchorX="center"
+        anchorY="middle"
+        fontWeight="bold"
+        letterSpacing={0.05}
+      >
+        {label.toUpperCase()}
+      </Text>
+
+      {/* Department shelves with Walmart styling */}
       {Array.from({ length: shelves }).map((_, i) => (
         <Shelf 
           key={i} 
@@ -97,22 +223,41 @@ function Department({ position, rotation = [0, 0, 0], shelves = 3, label, itemTe
         />
       ))}
       
-      {/* Department dividers/walls */}
-      <Wall 
-        position={[-4, 3, 0]} 
-        size={[0.5, 6, 2]} 
-      />
-      
-      <Wall 
-        position={[4, 3, 0]} 
-        size={[0.5, 6, 2]} 
-      />
-      
-      {/* Department sign/label */}
-      <mesh position={[0, 9, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[8, 1]} />
-        <meshBasicMaterial color="#FFD700" />
+      {/* Dark blue-gray vertical shelf dividers */}
+      <mesh position={[-4, 3, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.5, 6, 2]} />
+        <meshStandardMaterial 
+          color={COLORS.SHELVES} 
+          metalness={0.2}
+          roughness={0.6}
+        />
       </mesh>
+      
+      <mesh position={[4, 3, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.5, 6, 2]} />
+        <meshStandardMaterial 
+          color={COLORS.SHELVES} 
+          metalness={0.2}
+          roughness={0.6}
+        />
+      </mesh>
+      
+      {/* Enhanced department sign */}
+      <group position={[0, 8, 0]}>
+        {/* Walmart blue background */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[10, 2]} />
+          <meshStandardMaterial color={COLORS.DEPARTMENT_SIGN} />
+        </mesh>
+        
+        {/* Yellow accent strip */}
+        <mesh position={[0, 0.01, -0.8]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[10, 0.3]} />
+          <meshStandardMaterial color={COLORS.ACCENT} />
+        </mesh>
+        
+        {/* Removed the golden/yellow department text */}
+      </group>
     </group>
   )
 }
@@ -156,25 +301,69 @@ export function StoreLayout() {
 
   return (
     <>
-      {/* Ambient lighting */}
-      <ambientLight intensity={0.5} />
+      {/* Enhanced ambient lighting for Walmart look */}
+      <ambientLight intensity={0.6} />
 
-      {/* Invisible physics floor */}
+      {/* Floor with proper color */}
       <Floor />
       <Ceiling />
 
-      {/* Outer walls */}
-      <Wall position={[-storeWidth / 2, storeHeight / 2, 0]} size={[1, storeHeight, storeLength]} />
-      <Wall position={[storeWidth / 2, storeHeight / 2, 0]} size={[1, storeHeight, storeLength]} />
-      <Wall position={[0, storeHeight / 2, -storeLength / 2]} size={[storeWidth, storeHeight, 1]} />
-      <Wall position={[0, storeHeight / 2, storeLength / 2]} size={[storeWidth, storeHeight, 1]} />
+      {/* Walmart-style outer walls with branding */}
+      <WalmartWall 
+        position={[-storeWidth / 2, storeHeight / 2, 0]} 
+        size={[1, storeHeight, storeLength]} 
+      />
+      <WalmartWall 
+        position={[storeWidth / 2, storeHeight / 2, 0]} 
+        size={[1, storeHeight, storeLength]} 
+      />
+      <WalmartWall 
+        position={[0, storeHeight / 2, -storeLength / 2]} 
+        size={[storeWidth, storeHeight, 1]} 
+        showLogo={true}
+      />
+      <WalmartWall 
+        position={[0, storeHeight / 2, storeLength / 2]} 
+        size={[storeWidth, storeHeight, 1]} 
+      />
 
-      {/* Store entrance */}
-      <Wall position={[0, storeHeight / 2, storeLength / 2 - 10]} size={[10, storeHeight, 1]} />
-      <Wall position={[15, storeHeight / 2, storeLength / 2 - 10]} size={[20, storeHeight, 1]} />
-      <Wall position={[-15, storeHeight / 2, storeLength / 2 - 10]} size={[20, storeHeight, 1]} />
+      {/* Enhanced store entrance with Walmart styling */}
+      <WalmartWall 
+        position={[0, storeHeight / 2, storeLength / 2 - 10]} 
+        size={[10, storeHeight, 1]} 
+      />
+      <WalmartWall 
+        position={[15, storeHeight / 2, storeLength / 2 - 10]} 
+        size={[20, storeHeight, 1]} 
+      />
+      <WalmartWall 
+        position={[-15, storeHeight / 2, storeLength / 2 - 10]} 
+        size={[20, storeHeight, 1]} 
+      />
 
-      {/* Departments */}
+      {/* Welcome sign above entrance */}
+      <group position={[0, 8, storeLength / 2 - 15]}>
+        <mesh>
+          <boxGeometry args={[20, 3, 0.2]} />
+          <meshStandardMaterial color={COLORS.DEPARTMENT_SIGN} />
+        </mesh>
+        <Text
+          position={[0, 0, 0.15]}
+          fontSize={1.5}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+          fontWeight="bold"
+        >
+          WELCOME TO WALMART
+        </Text>
+        <mesh position={[0, -1, 0.12]}>
+          <boxGeometry args={[18, 0.3, 0.1]} />
+          <meshStandardMaterial color={COLORS.ACCENT} />
+        </mesh>
+      </group>
+
+      {/* Departments with section labels */}
       <Department position={[-15, 0, -10]} label="Electronics" itemTextures={electronicsTextures} />
       <Department position={[0, 0, -10]} label="Clothing" itemTextures={clothingTextures} />
       <Department position={[15, 0, -10]} label="Groceries" itemTextures={groceriesTextures} />
@@ -184,4 +373,3 @@ export function StoreLayout() {
     </>
   );
 }
-

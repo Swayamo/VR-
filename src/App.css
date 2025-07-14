@@ -1,3 +1,11 @@
+/* Walmart theme colors */
+:root {
+  --walmart-blue: #0071dc;
+  --walmart-yellow: #ffc220;
+  --walmart-light-blue: #e6f3ff;
+  --walmart-dark-blue: #004c91;
+}
+
 .App {
   position: absolute;
   top: 0;
@@ -5,6 +13,7 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  background: linear-gradient(to bottom, var(--walmart-light-blue), #87CEEB);
 }
 
 /* hide cursor when controls are locked */
@@ -67,8 +76,9 @@ canvas {
   max-height: 80vh;
   position: relative;
   animation: slideUp 0.3s ease-out;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 113, 220, 0.3);
   overflow: hidden;
+  border: 3px solid var(--walmart-blue);
 }
 
 @keyframes slideUp {
@@ -125,7 +135,7 @@ canvas {
 }
 
 .modal-details h2 {
-  color: #0071dc;
+  color: var(--walmart-blue);
   margin: 0 0 1rem 0;
   font-size: 1.8rem;
 }
@@ -147,7 +157,7 @@ canvas {
 .modal-price {
   font-size: 2.2rem;
   font-weight: bold;
-  color: #0071dc;
+  color: var(--walmart-blue);
 }
 
 .modal-rating {
@@ -156,7 +166,7 @@ canvas {
 }
 
 .modal-add-to-cart {
-  background: linear-gradient(135deg, #0071dc 0%, #005bb2 100%);
+  background: linear-gradient(135deg, var(--walmart-blue) 0%, var(--walmart-dark-blue) 100%);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -167,12 +177,13 @@ canvas {
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(0, 113, 220, 0.3);
 }
 
 .modal-add-to-cart:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 113, 220, 0.4);
-  background: linear-gradient(135deg, #005bb2 0%, #004189 100%);
+  background: linear-gradient(135deg, var(--walmart-dark-blue) 0%, #003a7a 100%);
 }
 
 /* Smoother cursor transitions */
@@ -203,16 +214,17 @@ canvas {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(135deg, var(--walmart-blue) 0%, var(--walmart-dark-blue) 100%);
   color: white;
   padding: 15px;
   border-radius: 12px;
   pointer-events: all;
   cursor: pointer;
   backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--walmart-yellow);
   transition: all 0.3s;
   max-width: 250px;
+  box-shadow: 0 4px 15px rgba(0, 113, 220, 0.3);
 }
 
 .controls-panel.collapsed {
@@ -232,11 +244,13 @@ canvas {
 }
 
 .key {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--walmart-yellow);
+  color: var(--walmart-blue);
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 0.85rem;
   margin-right: 10px;
+  font-weight: bold;
 }
 
 /* Enhanced Filter Panel */
@@ -244,19 +258,20 @@ canvas {
   position: absolute;
   top: 20px;
   left: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(135deg, var(--walmart-blue) 0%, var(--walmart-dark-blue) 100%);
   color: white;
   padding: 15px;
   border-radius: 12px;
   width: 250px;
   pointer-events: all;
   backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--walmart-yellow);
   transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 113, 220, 0.3);
 }
 
 .filter-panel:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, var(--walmart-dark-blue) 0%, #003a7a 100%);
 }
 
 .filter-row {
@@ -281,9 +296,11 @@ canvas {
   display: inline-flex;
   align-items: center;
   padding: 4px 8px;
-  background-color: #0071dc;
+  background-color: var(--walmart-yellow);
+  color: var(--walmart-blue);
   border-radius: 20px;
   font-size: 0.8rem;
+  font-weight: bold;
 }
 
 .category-badge button, .search-badge button {
@@ -300,7 +317,7 @@ canvas {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(135deg, var(--walmart-blue) 0%, var(--walmart-dark-blue) 100%);
   color: white;
   padding: 12px 20px;
   border-radius: 30px;
@@ -310,13 +327,15 @@ canvas {
   pointer-events: all;
   cursor: pointer;
   backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--walmart-yellow);
   transition: transform 0.3s, background-color 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 113, 220, 0.3);
 }
 
 .cart-panel:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, var(--walmart-dark-blue) 0%, #003a7a 100%);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 113, 220, 0.4);
 }
 
 .cart-panel.bounce {
@@ -352,21 +371,21 @@ canvas {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #0071dc;
-  border: none;
+  background: linear-gradient(135deg, var(--walmart-blue) 0%, var(--walmart-dark-blue) 100%);
+  border: 3px solid var(--walmart-yellow);
   color: white;
   font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 113, 220, 0.3);
   transition: all 0.3s;
 }
 
 .voice-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 113, 220, 0.4);
 }
 
 .voice-button.active {
@@ -436,7 +455,7 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #0071dc 0%, #004f9a 100%);
+  background: linear-gradient(135deg, var(--walmart-blue) 0%, var(--walmart-dark-blue) 100%);
   animation: gradient-shift 10s ease infinite;
   display: flex;
   flex-direction: column;
@@ -464,6 +483,7 @@ canvas {
   font-weight: bold;
   margin-bottom: 30px;
   letter-spacing: 2px;
+  color: var(--walmart-yellow);
 }
 
 .loading-spinner {
